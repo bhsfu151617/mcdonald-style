@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Urban Table | 24/7 Student Restaurant</title>
+<style>
+:root{
+  --primary:#173f35;--secondary:#e9b949;--cream:#faf7f0;--white:#fff;
+  --dark:#1d2522;--muted:#69736e;--light:#eef2ed;--border:#dfe5df;--danger:#a94442;
+  --shadow:0 10px 30px rgba(0,0,0,.08);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--cream:#14201c;--white:#1b2925;--dark:#eef2ed;--light:#20302a;--border:#2b3a34;--muted:#9caea5;}
+}
+:root[data-theme="dark"]{--cream:#14201c;--white:#1b2925;--dark:#eef2ed;--light:#20302a;--border:#2b3a34;--muted:#9caea5;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--dark);background:var(--cream);line-height:1.6}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+header{position:sticky;top:0;z-index:1000;background:rgba(250,247,240,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top,0px)}
+.navbar{max-width:1200px;margin:auto;min-height:64px;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;flex-wrap:wrap;gap:10px}
+.logo{font-family:Georgia,serif;font-size:22px;font-weight:bold;color:var(--primary)}
+.logo span{color:var(--secondary)}
+.nav-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:none;padding:10px 16px;border-radius:8px;font-weight:bold;transition:.2s}
+.btn-primary{background:var(--secondary);color:var(--dark)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary)}
+.hero{padding:50px 20px;background:linear-gradient(rgba(23,63,53,.88),rgba(23,63,53,.88)),radial-gradient(circle at 70% 30%,#e9b949,transparent 30%);color:#fff;text-align:center}
+.hero h1{font-family:Georgia,serif;font-size:clamp(32px,7vw,58px);margin-bottom:14px}
+.hero h1 span{color:var(--secondary)}
+.hero p{max-width:600px;margin:0 auto 24px;color:#e5ebe7}
+section{padding:50px 20px}
+.container{max-width:1100px;margin:auto}
+.section-heading{text-align:center;max-width:650px;margin:0 auto 30px}
+.eyebrow{color:var(--secondary);text-transform:uppercase;font-size:12px;font-weight:bold;letter-spacing:2px;margin-bottom:8px}
+.section-heading h2{font-family:Georgia,serif;color:var(--primary);font-size:clamp(26px,5vw,38px)}
+.section-heading p{color:var(--muted)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.menu-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.menu-image{height:110px;background:linear-gradient(135deg,#dfe8df,#f3ead5);display:grid;place-items:center;font-size:44px}
+.menu-content{padding:16px}
+.menu-title{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+.menu-title h3{color:var(--primary);font-size:16px}
+.price{font-weight:bold;white-space:nowrap}
+.menu-description{font-size:13px;color:var(--muted);margin-bottom:10px}
+.tag{font-size:10px;padding:3px 7px;border-radius:20px;background:var(--light)}
+.loyalty-card{background:linear-gradient(120deg,var(--primary),#285d4e);color:#fff;border-radius:20px;padding:30px;display:grid;gap:20px}
+.points{font-size:40px;font-family:Georgia,serif;color:var(--secondary)}
+.reward-list{list-style:none}
+.reward-list li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.15)}
+.auth-status{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+footer{background:#102e27;color:#fff;padding:30px 20px;text-align:center;font-size:13px}
+footer a{color:#cbd8d2}
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:3000;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:26px;width:min(380px,100%);box-shadow:var(--shadow);max-height:90vh;overflow-y:auto}
+.modal h2{font-family:Georgia,serif;color:var(--primary);margin-bottom:6px}
+.modal p.sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:13px;margin-bottom:5px}
+.form-group input{width:100%;padding:10px;border:1px solid var(--border);border-radius:7px;background:var(--cream);color:var(--dark)}
+.modal .btn-primary{width:100%;margin-top:6px}
+.switch-line{text-align:center;font-size:13px;margin-top:12px;color:var(--muted)}
+.switch-line a{color:var(--primary);font-weight:bold}
+.error-msg{color:var(--danger);font-size:12px;margin-top:6px;min-height:14px}
+.close-x{position:absolute;top:14px;right:18px;background:none;border:none;font-size:20px;color:var(--muted)}
+.modal{position:relative}
+.notice{background:#fff8e6;border:1px solid var(--secondary);border-radius:10px;padding:10px 14px;font-size:12px;color:#6b5710;margin-bottom:16px}
+/* Corner Menu */
+.menu-toggle{background:var(--primary);color:#fff;border:none;width:44px;height:44px;border-radius:10px;font-size:18px;display:grid;place-items:center}
+.menu-drawer{position:fixed;top:0;right:-420px;width:min(400px,100%);height:100vh;background:var(--cream);z-index:4000;box-shadow:-10px 0 30px rgba(0,0,0,.2);transition:.3s;overflow-y:auto;padding:20px;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+.menu-drawer.open{right:0}
+.menu-drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.menu-drawer-header h2{font-family:Georgia,serif;color:var(--primary)}
+.menu-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:14px}
+.menu-tab{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:13px}
+.menu-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.drawer-item{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.drawer-item-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;gap:10px}
+.drawer-item-head h4{font-size:14px;color:var(--primary)}
+.drawer-item-head p{font-size:11px;color:var(--muted);margin-top:2px}
+.drawer-item-details{display:none;padding:0 14px 14px;font-size:12px;color:var(--muted)}
+.drawer-item.open .drawer-item-details{display:block}
+.nutri-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin:8px 0}
+.nutri-grid span:nth-child(odd){color:var(--dark)}
+.nutri-grid span:nth-child(even){text-align:right;font-weight:bold;color:var(--primary)}
+.allergen-line{color:var(--danger);font-size:11px;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="logo">Urban <span>Table</span></div>
+    <div class="nav-actions" id="navActions"></div>
+  </div>
+</header>
+
+<div class="menu-drawer" id="menuDrawer">
+  <div class="menu-drawer-header">
+    <h2>Our Menu</h2>
+    <button class="close-x" style="position:static" id="closeMenuDrawer">✕</button>
+  </div>
+  <div class="menu-tabs" id="menuTabs"></div>
+  <div id="menuItemsArea"></div>
+</div>
+
+<section class="hero">
+  <h1>Real Food, <span>Real Transparency</span></h1>
+  <p>A 24/7 student restaurant with clear nutrition info, honest ingredients — and a loyalty program that actually rewards you.</p>
+  <button class="btn btn-primary" id="heroCta">Join the Loyalty Program</button>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Menu</div>
+      <h2>Today's Favorites</h2>
+      <p>Every dish lists allergens and calories.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="menu-image">🍝</div><div class="menu-content">
+        <div class="menu-title"><h3>Herb Pasta</h3><span class="price">$6.50</span></div>
+        <p class="menu-description">Whole wheat pasta, olive oil, garden herbs. 480 cal.</p>
+        <span class="tag">Vegetarian</span></div></div>
+      <div class="menu-card"><div class="menu-image">🥗</div><div class="menu-content">
+        <div class="menu-title"><h3>Harvest Bowl</h3><span class="price">$5.00</span></div>
+        <p class="menu-description">Quinoa, chickpeas, roasted veg. 390 cal.</p>
+        <span class="tag">Vegan</span></div></div>
+      <div class="menu-card"><div class="menu-image">🍛</div><div class="menu-content">
+        <div class="menu-title"><h3>Student Curry</h3><span class="price">$7.00</span></div>
+        <p class="menu-description">Lentil curry, brown rice. 520 cal.</p>
+        <span class="tag">Gluten-Free</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="loyaltySection" style="background:var(--light)">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Loyalty Program</div>
+      <h2>Your Rewards</h2>
+    </div>
+    <div id="loyaltyArea"></div>
+  </div>
+</section>
+
+<footer>
+  <p>The Urban Table — open 24/7 for students. This is a student project demo.</p>
+</footer>
+
+<!-- Auth Modal -->
+<div class="overlay" id="authOverlay">
+  <div class="modal">
+    <button class="close-x" id="closeModal">✕</button>
+    <div id="authFormArea"></div>
+  </div>
+</div>
+
+<script>
+/* ---------- Storage (demo "database" kept in this browser) ---------- */
+const DB_KEY = "urbanTableUsers";
+const SESSION_KEY = "urbanTableSession";
+
+function getUsers(){ return JSON.parse(localStorage.getItem(DB_KEY) || "{}"); }
+function saveUsers(u){ localStorage.setItem(DB_KEY, JSON.stringify(u)); }
+function getSession(){ return localStorage.getItem(SESSION_KEY); }
+function setSession(id){ localStorage.setItem(SESSION_KEY, id); }
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+
+function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function isMobile(v){ return /^\+?\d{7,15}$/.test(v.replace(/[\s-]/g,"")); }
+
+let mode = "login"; // or "signup"
+
+function openAuth(startMode){
+  mode = startMode;
+  renderAuthForm();
+  document.getElementById("authOverlay").classList.add("open");
+}
+function closeAuth(){ document.getElementById("authOverlay").classList.remove("open"); }
+
+function renderAuthForm(){
+  const area = document.getElementById("authFormArea");
+  if(mode === "signup"){
+    area.innerHTML = `
+      <h2>Create Account</h2>
+      <p class="sub">Sign up with your mobile number or email</p>
+      <div class="notice">Demo storage: your data is saved in this browser only (localStorage), not a live central server. See note below for making it a real shared database.</div>
+      <div class="form-group"><label>Full name</label><input id="s_name" placeholder="Jane Doe"></div>
+      <div class="form-group"><label>Mobile number or email</label><input id="s_id" placeholder="+91 98765 43210 or jane@mail.com"></div>
+      <div class="form-group"><label>Password</label><input id="s_pass" type="password" placeholder="Min 6 characters"></div>
+      <div class="error-msg" id="authErr"></div>
+      <button class="btn btn-primary" id="doSignup">Sign Up</button>
+      <p class="switch-line">Already have an account? <a id="toLogin">Log in</a></p>
+    `;
+    document.getElementById("toLogin").onclick = () => openAuth("login");
+    document.getElementById("doSignup").onclick = handleSignup;
+  } else {
+    area.innerHTML = `
+      <h2>Log In</h2>
+      <p class="sub">Use the mobile number or email you signed up with</p>
+      <div class="form-group"><label>Mobile number or email</label><input id="l_id" placeholder="+91 98765 43210 or jane@mail.com"></div>
+      <div class="form-group"><label>Password</label><input id="l_pass" type="password" placeholder="Password"></div>
+      <div class="error-msg" id="authErr"></div>
+      <button class="btn btn-primary" id="doLogin">Log In</button>
+      <p class="switch-line">New here? <a id="toSignup">Create an account</a></p>
+    `;
+    document.getElementById("toSignup").onclick = () => openAuth("signup");
+    document.getElementById("doLogin").onclick = handleLogin;
+  }
+}
+
+function handleSignup(){
+  const name = document.getElementById("s_name").value.trim();
+  const id = document.getElementById("s_id").value.trim();
+  const pass = document.getElementById("s_pass").value;
+  const err = document.getElementById("authErr");
+
+  if(!name || !id || !pass){ err.textContent = "Please fill in every field."; return; }
+  if(!isEmail(id) && !isMobile(id)){ err.textContent = "Enter a valid email or mobile number."; return; }
+  if(pass.length < 6){ err.textContent = "Password must be at least 6 characters."; return; }
+
+  const users = getUsers();
+  if(users[id]){ err.textContent = "An account with this ID already exists."; return; }
+
+  users[id] = { name, pass, points: 50, joined: new Date().toISOString() };
+  saveUsers(users);
+  setSession(id);
+  closeAuth();
+  render();
+}
+
+function handleLogin(){
+  const id = document.getElementById("l_id").value.trim();
+  const pass = document.getElementById("l_pass").value;
+  const err = document.getElementById("authErr");
+  const users = getUsers();
+
+  if(!users[id] || users[id].pass !== pass){ err.textContent = "Incorrect ID or password."; return; }
+  setSession(id);
+  closeAuth();
+  render();
+}
+
+function logout(){ clearSession(); render(); }
+
+function render(){
+  const nav = document.getElementById("navActions");
+  const loyaltyArea = document.getElementById("loyaltyArea");
+  const session = getSession();
+  const users = getUsers();
+
+  if(session && users[session]){
+    const u = users[session];
+    nav.innerHTML = `<span style="font-size:13px;margin-right:6px">Hi, ${u.name.split(" ")[0]}</span>
+      <button class="btn btn-outline" id="logoutBtn">Log Out</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" title="Full Menu">☰</button>`;
+    document.getElementById("logoutBtn").onclick = logout;
+    document.getElementById("menuToggle").onclick = openMenuDrawer;
+
+    loyaltyArea.innerHTML = `
+      <div class="loyalty-card">
+        <div>
+          <div class="points">${u.points} pts</div>
+          <p style="color:#dfe7e2">Member since ${new Date(u.joined).toLocaleDateString()}</p>
+        </div>
+        <ul class="reward-list">
+          <li>100 pts — Free dessert</li>
+          <li>250 pts — Free main course</li>
+          <li>500 pts — $10 off your order</li>
+        </ul>
+        <button class="btn btn-primary" id="addPoints">Simulate order (+15 pts)</button>
+      </div>`;
+    document.getElementById("addPoints").onclick = () => {
+      users[session].points += 15;
+      saveUsers(users);
+      render();
+    };
+  } else {
+    nav.innerHTML = `<button class="btn btn-outline" id="loginBtn">Log In</button>
+      <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" title="Full Menu">☰</button>`;
+    document.getElementById("loginBtn").onclick = () => openAuth("login");
+    document.getElementById("signupBtn").onclick = () => openAuth("signup");
+    document.getElementById("menuToggle").onclick = openMenuDrawer;
+
+    loyaltyArea.innerHTML = `<div class="auth-status">
+      <p style="margin-bottom:14px">Log in or sign up to see your points and rewards.</p>
+      <button class="btn btn-primary" id="joinBtn2">Sign Up Now</button>
+    </div>`;
+    document.getElementById("joinBtn2").onclick = () => openAuth("signup");
+  }
+}
+
+document.getElementById("heroCta").onclick = () => openAuth(getSession() ? "login" : "signup");
+document.getElementById("closeModal").onclick = closeAuth;
+document.getElementById("authOverlay").addEventListener("click", e => { if(e.target.id === "authOverlay") closeAuth(); });
+
+/* ---------- Full Menu Drawer ---------- */
+const FULL_MENU = {
+  "Mains & Wraps": [
+    { name:"Herb Pasta", tagline:"Comfort in a bowl.", desc:"Whole wheat pasta tossed in olive oil with garden herbs.", serving:"320g", allergens:"Cereal containing gluten", energy:480, protein:14, fat:12, carbs:70, sugar:5, sodium:420, ingredients:"Whole wheat pasta, olive oil, mixed herbs, garlic", price:"$6.50" },
+    { name:"Student Curry", tagline:"Spice, on a budget.", desc:"Lentil curry served over brown rice.", serving:"350g", allergens:"None", energy:520, protein:18, fat:9, carbs:88, sugar:6, sodium:390, ingredients:"Lentils, brown rice, tomato, onion, spices", price:"$7.00" },
+    { name:"Grilled Veggie Wrap", tagline:"Fresh, fast, filling.", desc:"Grilled seasonal vegetables with hummus in a whole wheat wrap.", serving:"260g", allergens:"Cereal containing gluten, Sesame", energy:410, protein:11, fat:14, carbs:55, sugar:4, sodium:480, ingredients:"Whole wheat wrap, grilled vegetables, hummus, greens", price:"$5.50" }
+  ],
+  "Snacks & Sides": [
+    { name:"Harvest Bowl", tagline:"Light and green.", desc:"Quinoa, chickpeas and roasted vegetables.", serving:"280g", allergens:"None", energy:390, protein:13, fat:10, carbs:58, sugar:6, sodium:310, ingredients:"Quinoa, chickpeas, roasted seasonal vegetables, lemon dressing", price:"$5.00" },
+    { name:"Crispy Potato Bites", tagline:"The classic side.", desc:"Golden roasted potato bites with a herb dip.", serving:"150g", allergens:"Milk", energy:310, protein:4, fat:15, carbs:38, sugar:1, sodium:340, ingredients:"Potato, olive oil, mixed herbs, yogurt dip", price:"$3.50" }
+  ],
+  "Desserts": [
+    { name:"Choco Chip Cookie", tagline:"One is never enough.", desc:"Freshly baked cookie with dark chocolate chips.", serving:"70g", allergens:"Cereal containing gluten, Milk, Egg", energy:320, protein:4, fat:16, carbs:40, sugar:22, sodium:120, ingredients:"Flour, butter, dark chocolate, sugar, egg", price:"$2.50" },
+    { name:"Fruit Yogurt Cup", tagline:"Light finish.", desc:"Greek yogurt layered with seasonal fruit and honey.", serving:"180g", allergens:"Milk", energy:210, protein:9, fat:5, carbs:32, sugar:24, sodium:60, ingredients:"Greek yogurt, seasonal fruit, honey", price:"$3.00" }
+  ],
+  "Beverages": [
+    { name:"Cold Brew Coffee", tagline:"Slow-steeped, always ready.", desc:"Smooth cold brew served over ice.", serving:"350ml", allergens:"None", energy:15, protein:0, fat:0, carbs:3, sugar:0, sodium:5, ingredients:"Coffee, water, ice", price:"$3.00" },
+    { name:"Fresh Lemon Iced Tea", tagline:"Cool off, fast.", desc:"Brewed tea with fresh lemon, lightly sweetened.", serving:"400ml", allergens:"None", energy:120, protein:0, fat:0, carbs:30, sugar:26, sodium:10, ingredients:"Tea, lemon, sugar, water", price:"$2.50" }
+  ]
+};
+let activeTab = Object.keys(FULL_MENU)[0];
+
+function openMenuDrawer(){
+  renderMenuTabs();
+  renderMenuItems();
+  document.getElementById("menuDrawer").classList.add("open");
+}
+function closeMenuDrawer(){ document.getElementById("menuDrawer").classList.remove("open"); }
+
+function renderMenuTabs(){
+  const tabsEl = document.getElementById("menuTabs");
+  tabsEl.innerHTML = Object.keys(FULL_MENU).map(cat =>
+    `<button class="menu-tab${cat === activeTab ? " active" : ""}" data-cat="${cat}">${cat}</button>`
+  ).join("");
+  tabsEl.querySelectorAll(".menu-tab").forEach(btn => {
+    btn.onclick = () => { activeTab = btn.dataset.cat; renderMenuTabs(); renderMenuItems(); };
+  });
+}
+
+function renderMenuItems(){
+  const area = document.getElementById("menuItemsArea");
+  area.innerHTML = FULL_MENU[activeTab].map((item, i) => `
+    <div class="drawer-item" id="item-${i}">
+      <div class="drawer-item-head" data-idx="${i}">
+        <div><h4>${item.name}</h4><p>${item.tagline}</p></div>
+        <span class="price">${item.price}</span>
+      </div>
+      <div class="drawer-item-details">
+        <p style="margin-bottom:8px">${item.desc}</p>
+        <p><strong>Serving Size:</strong> ${item.serving}</p>
+        <p class="allergen-line"><strong>Allergen Warning:</strong> ${item.allergens}</p>
+        <div class="nutri-grid">
+          <span>Energy</span><span>${item.energy} kcal</span>
+          <span>Protein</span><span>${item.protein} g</span>
+          <span>Total Fat</span><span>${item.fat} g</span>
+          <span>Total Carbs</span><span>${item.carbs} g</span>
+          <span>Total Sugars</span><span>${item.sugar} g</span>
+          <span>Sodium</span><span>${item.sodium} mg</span>
+        </div>
+        <p><strong>Ingredients:</strong> ${item.ingredients}</p>
+      </div>
+    </div>
+  `).join("");
+  area.querySelectorAll(".drawer-item-head").forEach(head => {
+    head.onclick = () => head.closest(".drawer-item").classList.toggle("open");
+  });
+}
+
+document.getElementById("closeMenuDrawer").onclick = closeMenuDrawer;
+
+render();
+</script>
+</body>
+</html>
